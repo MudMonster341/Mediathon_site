@@ -1,0 +1,300 @@
+/* =============================================================================
+   Image Gallery - Dark Pink & Gold Theme
+   ============================================================================= */
+
+body {
+    background: 
+        url('../assets/images/bg_image.png') center/cover no-repeat fixed,
+        linear-gradient(135deg, #6d2421 0%, #8e3430 25%, #6d2421 50%, #4a1817 75%, #6d2421 100%);
+    
+    /* Overlay for better contrast */
+    background-blend-mode: overlay, normal;
+    min-height: 100vh;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.gallery-container {
+    position: relative;
+    min-height: 100vh;
+    padding: var(--space-lg);
+    z-index: 10;
+}
+
+/* =============================================================================
+   Header
+   ============================================================================= */
+
+.gallery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-xl);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2rem;
+}
+
+.page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.site-branding {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.canvas-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--gold);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.05em;
+}
+
+/* =============================================================================
+   Image Gallery Section
+   ============================================================================= */
+
+.image-gallery-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 85vh;
+    padding: 2rem 0;
+}
+
+.gallery-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+/* =============================================================================
+   Navigation Arrows
+   ============================================================================= */
+
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 20;
+}
+
+.gallery-nav:hover {
+    background: var(--gold);
+    color: var(--wall);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 179, 35, 0.6);
+}
+
+.gallery-nav--prev {
+    left: -100px;
+}
+
+.gallery-nav--next {
+    right: -100px;
+}
+
+/* =============================================================================
+   Main Image Display
+   ============================================================================= */
+
+.main-image-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 90vw;
+    max-height: 60vh;
+}
+
+.image-frame {
+    position: relative;
+    padding: 30px;
+    background: 
+        linear-gradient(45deg, #ffb323 0%, #ffc757 15%, #ffb323 30%, #e09d1f 45%, #ffb323 60%, #ffc757 75%, #ffb323 90%, #e09d1f 100%);
+    border-radius: 15px;
+    box-shadow: 
+        0 0 0 4px #b8741a,
+        0 0 0 8px #ffb323,
+        0 0 0 12px #e09d1f,
+        0 15px 50px rgba(0, 0, 0, 0.8),
+        0 0 80px rgba(255, 179, 35, 0.4);
+    animation: frameGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes frameGlow {
+    0% { 
+        box-shadow: 
+            0 0 0 4px #b8741a,
+            0 0 0 8px #ffb323,
+            0 0 0 12px #e09d1f,
+            0 15px 50px rgba(0, 0, 0, 0.8),
+            0 0 80px rgba(255, 179, 35, 0.4);
+    }
+    100% { 
+        box-shadow: 
+            0 0 0 4px #b8741a,
+            0 0 0 8px #ffb323,
+            0 0 0 12px #e09d1f,
+            0 15px 50px rgba(0, 0, 0, 0.8),
+            0 0 120px rgba(255, 179, 35, 0.6);
+    }
+}
+
+.main-image {
+    max-width: 80vw;
+    max-height: 55vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: all 0.6s ease;
+}
+
+/* =============================================================================
+   Quote Section
+   ============================================================================= */
+
+.quote-section {
+    text-align: center;
+    max-width: 800px;
+    margin-top: 2rem;
+}
+
+.main-quote {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-style: italic;
+    color: var(--gold);
+    line-height: 1.4;
+    margin: 0;
+    text-shadow: 0 3px 20px rgba(0, 0, 0, 0.9);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    padding: 0 3rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: quoteAppear 0.8s ease 0.3s forwards;
+}
+
+@keyframes quoteAppear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-quote::before {
+    content: '"';
+    position: absolute;
+    left: 0.5rem;
+    top: -0.3em;
+    font-size: 2.5em;
+    color: var(--gold);
+    opacity: 0.7;
+    font-family: serif;
+}
+
+.main-quote::after {
+    content: '"';
+    position: absolute;
+    right: 0.5rem;
+    bottom: -0.4em;
+    font-size: 2.5em;
+    color: var(--gold);
+    opacity: 0.7;
+    font-family: serif;
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+@media (max-width: 1024px) {
+    .gallery-nav--prev {
+        left: -80px;
+    }
+    
+    .gallery-nav--next {
+        right: -80px;
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-nav {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .gallery-nav--prev {
+        left: -60px;
+    }
+    
+    .gallery-nav--next {
+        right: -60px;
+    }
+    
+    .main-image {
+        max-width: 85vw;
+        max-height: 50vh;
+    }
+    
+    .main-quote {
+        padding: 0 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-nav--prev {
+        left: 10px;
+    }
+    
+    .gallery-nav--next {
+        right: 10px;
+    }
+    
+    .image-frame {
+        padding: 20px;
+    }
+    
+    .main-quote {
+        padding: 0 1.5rem;
+    }
+}

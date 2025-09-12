@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Members - The 4 Year Canvas</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=TAN+Harmoni:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/base.css">
+    
+    <style>
+        body {
+            background: 
+                url('assets/images/bg_image.png') center/cover no-repeat fixed,
+                linear-gradient(135deg, #6d2421 0%, #8e3430 25%, #6d2421 50%, #4a1817 75%, #6d2421 100%);
+            background-blend-mode: overlay, normal;
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .team-container {
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .team-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .team-title {
+            font-family: 'TAN Harmoni', 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f4e4a6 0%, #d4af37 25%, #b8860b 50%, #d4af37 75%, #f4e4a6 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+            animation: goldShimmer 3s ease-in-out infinite;
+        }
+        
+        .team-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            color: rgba(244, 228, 166, 0.9);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Museum Frame Integration */
+        .museum-frame{
+            /* ---- Theme knobs ---- */
+            --frame: 26px;
+            --mat: 18px;
+            --radius: 10px;
+            --gold1: #b68c2a;
+            --gold2: #e5c15a;
+            --gold3: #f5e2a6;
+            --gold4: #8a6a1d;
+
+            position: relative;
+            display: inline-grid;
+            grid-template-rows: auto auto;
+            gap: 10px;
+            padding: var(--mat);
+            background: #f7f4ec;
+            border-radius: calc(var(--radius) * .6);
+            box-shadow:
+                0 1px 0 rgba(255,255,255,0.6) inset,
+                0 12px 22px rgba(0,0,0,0.12);
+
+            border: var(--frame) solid transparent;
+            border-image: conic-gradient(
+                from 45deg,
+                var(--gold2) 0%,
+                var(--gold3) 12%,
+                var(--gold1) 28%,
+                var(--gold4) 45%,
+                var(--gold2) 60%,
+                var(--gold3) 76%,
+                var(--gold1) 88%,
+                var(--gold2) 100%
+            ) 1;
+
+            outline: 1px solid rgba(0,0,0,.08);
+            outline-offset: -1px;
+        }
+
+        .museum-frame::before{
+            content:"";
+            position:absolute;
+            inset: calc(var(--frame) - 6px);
+            border-radius: calc(var(--radius) * .45);
+            background:
+                linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,0) 40%) padding-box,
+                linear-gradient(315deg, rgba(0,0,0,.18), rgba(0,0,0,0) 60%) padding-box,
+                conic-gradient(from 90deg,
+                var(--gold3), var(--gold2), var(--gold1), var(--gold4), var(--gold3)
+                ) border-box;
+            border: 6px solid transparent;
+            pointer-events:none;
+            box-shadow:
+                0 0 0 1px rgba(0,0,0,.06) inset,
+                0 2px 6px rgba(0,0,0,.12) inset;
+        }
+
+        .museum-frame::after{
+            content:"";
+            position:absolute;
+            inset: calc(var(--frame) + 2px);
+            border-radius: calc(var(--radius) * .35);
+            background:
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,.9) 18%, rgba(0,0,0,.15) 19% 22%, transparent 23%) 0 0/14px 14px,
+                radial-gradient(circle at 50% 50%, rgba(0,0,0,.12) 18%, transparent 19%) 7px 7px/14px 14px;
+            -webkit-mask:
+                linear-gradient(#000 0 0) padding-box,
+                linear-gradient(#000 0 0) content-box;
+            mask:
+                linear-gradient(#000 0 0) padding-box,
+                linear-gradient(#000 0 0) content-box;
+            border: 10px solid transparent;
+            pointer-events:none;
+            opacity:.35;
+        }
+
+        .museum-frame > img{
+            display:block;
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: calc(var(--radius) * .25);
+            box-shadow: 0 1px 0 rgba(255,255,255,.6) inset;
+        }
+        
+        .team-members {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .team-member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+        
+        .member-name {
+            font-family: 'TAN Harmoni', 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0;
+            background: linear-gradient(135deg, #f4e4a6 0%, #d4af37 25%, #b8860b 50%, #d4af37 75%, #f4e4a6 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+            animation: goldShimmer 3s ease-in-out infinite;
+        }
+        
+        .back-button {
+            padding: 1rem 2rem;
+            background: rgba(255, 179, 35, 0.9);
+            color: #6d2421;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .back-button:hover {
+            background: #ffb323;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        @keyframes goldShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @media (max-width: 768px) {
+            .team-members {
+                flex-direction: column;
+                gap: 3rem;
+                align-items: center;
+            }
+            
+            .team-container {
+                padding: 1rem;
+            }
+            
+            .museum-frame > img {
+                width: 250px;
+                height: 250px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .museum-frame > img {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .team-members {
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="team-container">
+        <div class="team-header">
+            <h1 class="team-title">The 4 Year Canvas</h1>
+            <p class="team-subtitle">Meet the Creative Team</p>
+        </div>
+        
+        <div class="team-members">
+            <div class="team-member">
+                <figure class="museum-frame">
+                    <img src="assets/images/team/mustafa.jpg" alt="Mustafa" loading="lazy">
+                </figure>
+                <h2 class="member-name">Mustafa</h2>
+            </div>
+            
+            <div class="team-member">
+                <figure class="museum-frame">
+                    <img src="assets/images/team/tarunikka.jpg" alt="Tarunikka" loading="lazy">
+                </figure>
+                <h2 class="member-name">Tarunikka</h2>
+            </div>
+        </div>
+        
+        <a href="rooms.html" class="back-button">← Back to Gallery</a>
+    </div>
+</body>
+</html>

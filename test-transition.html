@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Transition</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/transition.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #333;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005999;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transition Test</h1>
+    <button onclick="testTransition()">Start Cinematic Transition</button>
+    
+    <script src="scripts/util.js"></script>
+    <script src="scripts/transition.js"></script>
+    
+    <script>
+        function testTransition() {
+            console.log('Testing transition...');
+            if (window.cinematicTransition) {
+                window.cinematicTransition.startTransition();
+            } else {
+                console.error('Cinematic transition not found');
+            }
+        }
+        
+        // Log when scripts are loaded
+        window.addEventListener('load', function() {
+            console.log('Page loaded');
+            console.log('cinematicTransition available:', !!window.cinematicTransition);
+        });
+    </script>
+</body>
+</html>

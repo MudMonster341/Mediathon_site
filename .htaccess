@@ -1,0 +1,14 @@
+# Video MIME types
+AddType video/mp4 .mp4
+AddType video/webm .webm
+AddType video/ogg .ogv
+
+# Cache control for videos
+<FilesMatch "\.(mp4|webm|ogv)$">
+    Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
+
+# Enable CORS for video files
+<FilesMatch "\.(mp4|webm|ogv)$">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>

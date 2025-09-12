@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Museum of Student Life</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/gallery.css">
+</head>
+<body>
+    <div class="gallery">
+        <!-- Museum environment -->
+        <div class="museum-skylight" aria-hidden="true"></div>
+        <div class="museum-floor vis-dots" aria-hidden="true"></div>
+        
+        <!-- Wall wash lighting -->
+        <div class="wall-wash"></div>
+        
+        <!-- Floor pattern -->
+        <div class="floor-pattern"></div>
+        
+        <!-- Header -->
+        <header class="gallery-header">
+            <div class="room-selector">
+                <a href="rooms.html" class="all-rooms-link">All Rooms</a>
+                <label for="room-select" class="sr-only">Select room</label>
+                <select id="room-select" class="room-select">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+            
+            <h1 id="exhibit-title" class="exhibit-title">Campus</h1>
+            
+            <div class="audio-controls">
+                <button type="button" id="mute-toggle" class="mute-toggle" aria-label="Toggle audio">
+                    <svg class="mute-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M23 9l-6 6"></path>
+                        <path d="M17 9l6 6"></path>
+                    </svg>
+                    <svg class="unmute-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main gallery stage -->
+        <main class="gallery-stage">
+            <!-- Navigation arrows -->
+            <button type="button" class="nav-arrow nav-arrow--prev" aria-label="Previous image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                </svg>
+            </button>
+            
+            <button type="button" class="nav-arrow nav-arrow--next" aria-label="Next image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+
+            <!-- Photo display -->
+            <div class="photo-display">
+                <!-- Photo title -->
+                <h2 id="photo-title" class="photo-title">Loading...</h2>
+                
+                <!-- Framed photo -->
+                <div id="photo-frame" class="photo-frame">
+                    <div class="photo-mat">
+                        <img 
+                            id="photo-image" 
+                            class="photo-image" 
+                            src="" 
+                            alt=""
+                            loading="lazy"
+                        >
+                    </div>
+                </div>
+                
+                <!-- Photo caption/quote -->
+                <blockquote id="photo-quote" class="photo-quote">
+                    <p class="quote-text">Loading...</p>
+                    <cite id="photo-credit" class="photo-credit">© Unknown</cite>
+                </blockquote>
+                
+                <!-- Clap button -->
+                <div class="clap-section">
+                    <button type="button" id="clap-btn" class="clap-btn">
+                        <svg class="clap-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        <span class="clap-text">Clap</span>
+                        <span id="clap-count" class="clap-count">0</span>
+                    </button>
+                </div>
+                
+                <!-- Museum furniture -->
+                <div class="stanchions" aria-hidden="true">
+                    <div class="post"></div><div class="post"></div><div class="post"></div><div class="post"></div><div class="post"></div>
+                    <div class="rope"></div>
+                </div>
+                <div class="bench" aria-hidden="true"></div>
+            </div>
+
+
+        </main>
+    </div>
+
+    <!-- Confetti container -->
+    <div id="confetti-container" class="confetti-container"></div>
+
+    <script src="scripts/data.rooms.js"></script>
+    <script src="scripts/util.js"></script>
+    <script src="scripts/confetti.js"></script>
+    <script src="scripts/gallery.js"></script>
+</body>
+</html>

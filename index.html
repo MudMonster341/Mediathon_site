@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum of Student Life - BITS Dubai</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=TAN+Harmoni:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/entry.css">
+    <link rel="stylesheet" href="styles/transition.css">
+    <link rel="stylesheet" href="styles/quote.css">
+</head>
+<body>
+    <main class="landing" role="main">
+        <!-- Fullscreen background video -->
+        <video class="landing__bg" autoplay muted loop playsinline preload="auto"
+               aria-hidden="true" id="bg-video">
+            <source src="assets/video/landing.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Foreground content -->
+        <section class="landing__content">
+            <h1 class="landing__title">THE 4-YEAR CANVAS</h1>
+            <p class="landing__subtitle">EVERY FRAME TELLS A CAMPUS STORY</p>
+
+            <button class="btn get-ticket-btn" id="openTicket">VIEW THE COLLECTION</button>
+        </section>
+    </main>
+
+    <!-- Password Modal -->
+    <div id="ticket-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" hidden>
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="modal-title">Entry Pass</h2>
+                <button type="button" class="modal-close" aria-label="Close modal">&times;</button>
+            </header>
+            
+            <form class="ticket-form" novalidate>
+                <div class="form-group">
+                    <div class="password-hint">What event is this?</div>
+                    <input 
+                        type="password" 
+                        id="password-input" 
+                        class="password-input"
+                        placeholder="Access code"
+                        autocomplete="off"
+                        required
+                        aria-describedby="password-error"
+                    >
+                    <div id="password-error" class="error-message" aria-live="polite"></div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Enter Museum</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/util.js"></script>
+    <script src="scripts/data.rooms.js"></script>
+    <script src="scripts/transition.js"></script>
+    <script src="scripts/quote.js"></script>
+    <script src="scripts/entry.js"></script>
+    
+    <!-- Video playback script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('bg-video');
+            
+            if (video) {
+                console.log('Video element found');
+                console.log('Video source:', video.querySelector('source').src);
+                
+                // Ensure video properties are set
+                video.muted = true;
+                video.loop = true;
+                video.autoplay = true;
+                video.playsInline = true;
+                
+                // Event listeners for debugging
+                video.addEventListener('loadstart', () => console.log('Video loading started'));
+                video.addEventListener('loadeddata', () => console.log('Video data loaded'));
+                video.addEventListener('canplay', () => {
+                    console.log('Video can play - attempting to play');
+                    video.play().catch(console.error);
+                });
+                video.addEventListener('playing', () => console.log('✅ Video is playing!'));
+                video.addEventListener('error', (e) => {
+                    console.error('❌ Video error:', e);
+                    console.error('Error details:', video.error);
+                });
+                
+                // Force load
+                video.load();
+                
+                // Attempt to play
+                setTimeout(() => {
+                    video.play().catch(error => {
+                        console.log('Autoplay blocked, will play on user interaction');
+                        // Play on first user interaction
+                        const playOnInteraction = () => {
+                            video.play().then(() => {
+                                console.log('Video playing after user interaction');
+                            }).catch(console.error);
+                            document.removeEventListener('click', playOnInteraction);
+                            document.removeEventListener('touchstart', playOnInteraction);
+                        };
+                        document.addEventListener('click', playOnInteraction);
+                        document.addEventListener('touchstart', playOnInteraction);
+                    });
+                }, 500);
+            } else {
+                console.error('❌ Video element not found!');
+            }
+        });
+    </script>
+</body>
+</html>

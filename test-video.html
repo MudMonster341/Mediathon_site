@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Test</title>
+    <style>
+        body { margin: 0; padding: 0; background: #000; }
+        video { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            object-fit: cover; 
+            z-index: -1; 
+        }
+        .content { 
+            position: relative; 
+            z-index: 1; 
+            color: white; 
+            text-align: center; 
+            padding-top: 50vh; 
+            font-family: Arial; 
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop playsinline>
+        <source src="assets/video/landing.mp4" type="video/mp4">
+    </video>
+    <div class="content">
+        <h1>Video Test</h1>
+        <p>If you see this text over a video, it's working!</p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.querySelector('video');
+            console.log('Video element:', video);
+            console.log('Video src:', video.currentSrc);
+            
+            video.addEventListener('loadstart', () => console.log('Load start'));
+            video.addEventListener('loadeddata', () => console.log('Data loaded'));
+            video.addEventListener('canplay', () => console.log('Can play'));
+            video.addEventListener('playing', () => console.log('Playing!'));
+            video.addEventListener('error', (e) => console.error('Error:', e, video.error));
+            
+            // Force play
+            video.play().catch(console.error);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,701 @@
+/* =============================================================================
+   Entry Hall Styles - Foyer & Ticket Modal
+   ============================================================================= */
+
+body {
+    min-height: 100vh;
+    background: var(--wall);
+    overflow-x: hidden;
+}
+
+/* =============================================================================
+   Entry Hall Layout
+   ============================================================================= */
+
+.entry-hall {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+}
+
+/* Wall wash lighting effect */
+.wall-wash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+/* Ceiling light strips */
+.ceiling-lights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.15) 0px,
+        rgba(255, 255, 255, 0.15) 20px,
+        transparent 20px,
+        transparent 60px
+    );
+    pointer-events: none;
+}
+
+/* Floor pattern */
+.floor-pattern {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(
+        to top,
+        var(--floor) 0%,
+        var(--floor) 20px,
+        transparent 20px,
+        transparent 40px,
+        rgba(183, 179, 173, 0.3) 40px,
+        rgba(183, 179, 173, 0.3) 42px,
+        transparent 42px
+    );
+    pointer-events: none;
+}
+
+/* =============================================================================
+   Foyer Content
+   ============================================================================= */
+
+.foyer-content {
+    text-align: center;
+    z-index: 10;
+    position: relative;
+    max-width: 800px;
+    width: 100%;
+}
+
+.museum-header {
+    margin-bottom: var(--space-3xl);
+}
+
+.museum-title {
+    color: var(--charcoal);
+    margin-bottom: var(--space-md);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.museum-subtitle {
+    font-size: 1.125rem;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* =============================================================================
+   Ticket Desk
+   ============================================================================= */
+
+.ticket-desk {
+    background: linear-gradient(
+        145deg,
+        #3e2723 0%,
+        #4e342e 50%,
+        #3e2723 100%
+    );
+    border: 3px solid var(--gold);
+    border-radius: var(--radius-xl);
+    padding: var(--space-3xl) var(--space-2xl);
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.3),
+        inset 0 2px 0 rgba(255,255,255,0.1),
+        inset 0 -2px 0 rgba(0,0,0,0.2);
+    position: relative;
+    transform: perspective(1200px) rotateX(5deg);
+    transition: transform var(--transition-slow);
+    overflow: hidden;
+}
+
+.ticket-desk::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(212, 175, 55, 0.05) 2px,
+        rgba(212, 175, 55, 0.05) 4px
+    );
+    pointer-events: none;
+}
+
+.ticket-desk::after {
+    content: 'TICKET DESK';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    opacity: 0.6;
+}
+
+.ticket-desk:hover {
+    transform: perspective(1200px) rotateX(0deg) translateY(-6px);
+}
+
+.get-ticket-btn {
+    background: linear-gradient(
+        135deg,
+        var(--gold-light) 0%,
+        var(--gold) 50%,
+        var(--gold-dark) 100%
+    );
+    color: var(--forest-dark);
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: var(--space-lg) var(--space-3xl);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--gold-dark);
+    box-shadow: 
+        0 8px 16px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        inset 0 -1px 0 rgba(0,0,0,0.2);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.get-ticket-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: left var(--transition-slow);
+}
+
+.get-ticket-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.get-ticket-btn:hover::before {
+    left: 100%;
+}
+
+.get-ticket-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-md);
+}
+
+.ticket-description {
+    margin-top: var(--space-lg);
+    color: var(--gold-light);
+    font-size: 0.875rem;
+    font-style: italic;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* =============================================================================
+   Modal Styles
+   ============================================================================= */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+}
+
+.modal:not([hidden]) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+.modal-content {
+    position: relative;
+    background: linear-gradient(135deg, rgba(45, 35, 30, 0.95) 0%, rgba(30, 25, 20, 0.98) 100%);
+    border: 2px solid rgba(244, 228, 166, 0.3);
+    border-radius: var(--radius-xl);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(244, 228, 166, 0.1);
+    max-width: 400px;
+    width: 85%;
+    max-height: 80vh;
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform var(--transition-normal);
+    backdrop-filter: blur(20px);
+}
+
+.modal:not([hidden]) .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-lg) var(--space-xl) var(--space-md);
+    border-bottom: 1px solid rgba(244, 228, 166, 0.2);
+    background: linear-gradient(135deg, rgba(244, 228, 166, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
+    position: relative;
+}
+
+.modal-header h2 {
+    font-size: 2rem;
+    color: #f4e4a6;
+    font-family: "TAN Harmoni", "Cormorant Garamond", serif;
+    font-weight: 400;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    color: rgba(244, 228, 166, 0.7);
+    font-size: 1.5rem;
+    transition: all var(--transition-fast);
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    color: rgba(244, 228, 166, 0.7);
+    font-size: 1.5rem;
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: rgba(244, 228, 166, 0.1);
+    color: #f4e4a6;
+    transform: scale(1.1);
+}
+
+/* =============================================================================
+   Ticket Form
+   ============================================================================= */
+
+.ticket-form {
+    padding: var(--space-lg) var(--space-xl) var(--space-xl);
+    background: linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%);
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: var(--space-lg);
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: #f4e4a6;
+    font-family: "TAN Harmoni", "Montserrat", sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: var(--space-md);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.password-hint {
+    font-size: 0.95rem;
+    color: rgba(244, 228, 166, 0.8);
+    font-style: italic;
+    margin-bottom: var(--space-md);
+    font-family: "Montserrat", sans-serif;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    text-align: center;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+}
+
+.password-input {
+    width: 100%;
+    font-size: 1.25rem;
+    padding: var(--space-lg) var(--space-lg);
+    border: 2px solid rgba(244, 228, 166, 0.3);
+    border-radius: var(--radius-lg);
+    background: rgba(0, 0, 0, 0.4);
+    color: #f4e4a6;
+    font-family: "Montserrat", sans-serif;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    letter-spacing: 0.05em;
+}
+
+.password-input:focus {
+    border-color: rgba(244, 228, 166, 0.8);
+    background: rgba(0, 0, 0, 0.6);
+    outline: none;
+    box-shadow: 0 0 20px rgba(244, 228, 166, 0.2);
+}
+
+.password-input::placeholder {
+    color: rgba(244, 228, 166, 0.5);
+}
+
+.password-input.error {
+    border-color: #dc2626;
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Shake animation for wrong password */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.error-message {
+    margin-top: var(--space-sm);
+    color: #ff6b6b;
+    font-size: 0.875rem;
+    min-height: 1.25rem;
+    font-family: "Montserrat", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-xl);
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, rgba(244, 228, 166, 0.9) 0%, rgba(212, 175, 55, 0.9) 100%);
+    color: #1a1a1a;
+    font-weight: 600;
+    padding: var(--space-md) var(--space-xl);
+    border: 2px solid rgba(244, 228, 166, 0.3);
+    border-radius: var(--radius-md);
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #f4e4a6 0%, #d4af37 100%);
+    border-color: rgba(244, 228, 166, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(244, 228, 166, 0.3);
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: left var(--transition-normal);
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.cancel-btn {
+    background: rgba(244, 228, 166, 0.1);
+    color: rgba(244, 228, 166, 0.8);
+    border: 1px solid rgba(244, 228, 166, 0.3);
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-md);
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(10px);
+}
+
+.cancel-btn:hover {
+    background: rgba(244, 228, 166, 0.2);
+    border-color: rgba(244, 228, 166, 0.5);
+    color: #f4e4a6;
+    transform: translateY(-1px);
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+@media (max-width: 768px) {
+    .entry-hall {
+        padding: var(--space-lg);
+    }
+    
+    .foyer-content {
+        max-width: 100%;
+    }
+    
+    .museum-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+    
+    .ticket-desk {
+        padding: var(--space-2xl) var(--space-lg);
+    }
+    
+    .get-ticket-btn {
+        font-size: 1.125rem;
+        padding: var(--space-md) var(--space-xl);
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: var(--space-lg);
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .museum-subtitle {
+        font-size: 1rem;
+    }
+    
+    .get-ticket-btn {
+        font-size: 1rem;
+        padding: var(--space-md) var(--space-lg);
+    }
+    
+    .modal-header {
+        padding: var(--space-lg);
+    }
+    
+    .ticket-form {
+        padding: var(--space-md) var(--space-lg) var(--space-lg);
+    }
+}
+
+/* =============================================================================
+   Landing Video Background
+   ============================================================================= */
+
+.landing{
+  position:relative;
+  display:grid;
+  place-items:center;
+  min-height:100vh;
+  overflow:hidden;
+  background:#1a1a1a; /* Fallback background */
+}
+
+.landing__bg{
+  position:fixed;
+  top:0; 
+  left:0;
+  width:100vw;
+  height:100vh;
+  object-fit:cover;
+  object-position:center center;
+  z-index:0;
+  filter:brightness(.6) contrast(1.1);
+  /* Ensure portrait videos fill the entire viewport */
+  min-width:100%;
+  min-height:100%;
+  background:#000;
+}
+
+.landing__content{
+  position:relative;
+  text-align:center;
+  color:#fff;
+  z-index:10;
+  max-width:800px;
+  padding:0 2rem;
+}
+
+.landing__title{
+  font-family:"TAN Harmoni", "Cormorant Garamond", serif;
+  font-size:clamp(3rem, 8vw, 6rem);
+  font-weight:800;
+  letter-spacing:0.1em;
+  margin-bottom:1rem;
+  line-height:1.1;
+  
+  /* Golden textured effect */
+  background: linear-gradient(135deg, #f4e4a6 0%, #d4af37 25%, #b8860b 50%, #d4af37 75%, #f4e4a6 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  /* Enhanced shadows for depth */
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+  
+  /* Subtle animation */
+  animation: goldShimmer 3s ease-in-out infinite;
+}
+
+@keyframes goldShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.landing__subtitle{
+  font-family:"Montserrat", sans-serif;
+  font-size:clamp(0.9rem, 2vw, 1.1rem);
+  font-weight:300;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  margin-bottom:3rem;
+  
+  /* Golden subtitle color */
+  color: #f4e4a6;
+  text-shadow: 
+    0 1px 2px rgba(0,0,0,0.8),
+    0 2px 8px rgba(212, 175, 55, 0.3),
+    0 4px 16px rgba(0,0,0,0.4);
+}
+
+.landing__content .desk {
+    width: 200px;
+    height: 120px;
+    background: linear-gradient(
+        145deg,
+        #3e2723 0%,
+        #4e342e 50%,
+        #3e2723 100%
+    );
+    border: 3px solid var(--gold);
+    border-radius: var(--radius-xl);
+    margin: 2rem auto;
+    position: relative;
+    box-shadow: 
+        0 8px 32px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.landing__content .get-ticket-btn {
+    background: linear-gradient(135deg, rgba(244, 228, 166, 0.2) 0%, rgba(212, 175, 55, 0.25) 100%);
+    color: #f4e4a6;
+    border: 2px solid rgba(244, 228, 166, 0.6);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    box-shadow: 
+        0 4px 20px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(244, 228, 166, 0.2);
+}
+
+.landing__content .get-ticket-btn:hover {
+    background: linear-gradient(135deg, rgba(244, 228, 166, 0.3) 0%, rgba(212, 175, 55, 0.35) 100%);
+    border-color: rgba(244, 228, 166, 0.8);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 
+        0 8px 30px rgba(0,0,0,0.4),
+        0 0 20px rgba(244, 228, 166, 0.3),
+        inset 0 1px 0 rgba(244, 228, 166, 0.3);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+.landing__content .get-ticket-btn:active {
+    transform: translateY(0);
+}

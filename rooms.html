@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Life Gallery - Museum of Student Life</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=TAN+Harmoni:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/rooms.css">
+</head>
+<body>
+    <!-- Gallery Container -->
+    <div class="gallery-container">
+        <!-- Header MUST BE FIRST -->
+        <header class="gallery-header">
+            <h1 class="page-title">Student Life Gallery</h1>
+            <div class="site-branding">
+                <a href="team.html" class="canvas-title">The 4 Year Canvas</a>
+            </div>
+        </header>
+
+        <!-- Carousel Section -->
+        <main class="image-gallery-section">
+            <!-- Minimal Hero Carousel Section -->
+            <section class="hero-carousel" id="heroCarousel" aria-roledescription="carousel" aria-label="Featured gallery">
+                <div class="hero-carousel__viewport" tabindex="0">
+                    <ul class="hero-carousel__track" id="heroTrack">
+                        <!-- Slides will be populated by JavaScript from data.carousel.js -->
+                    </ul>
+                    
+                    <!-- Centered Navigation Controls -->
+                    <div class="hero-carousel__controls">
+                        <button class="hero-carousel__arrow prev" id="heroPrev" aria-label="Previous">‹</button>
+                        <button class="hero-carousel__arrow next" id="heroNext" aria-label="Next">›</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal for Full Image Display -->
+        <div id="imageModal" class="image-modal" hidden>
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <button class="modal-close" aria-label="Close">&times;</button>
+                <div class="modal-image-container">
+                    <figure class="museum-frame" id="museumFrame">
+                        <img id="modalImage" class="modal-image" src="" alt="">
+                    </figure>
+                </div>
+                <div class="modal-quote-section">
+                    <blockquote id="modalQuote" class="modal-quote"></blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/data.carousel.js"></script>
+    <script src="scripts/util.js"></script>
+    <script src="scripts/hero-carousel.js"></script>
+</body>
+</html>

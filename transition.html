@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum of Student Life - Transition</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Base styles only -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/transition.css">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: #6d2421;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Clean transition page with just background */
+        .transition-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #6d2421;
+            z-index: 1;
+        }
+        
+        /* Ensure cinematic overlay appears above everything */
+        .cinematic-overlay {
+            z-index: 10000 !important;
+        }
+        
+        /* Minimal loading indicator */
+        .loading-indicator {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+        
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffb323;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+        
+        .loading-dot:nth-child(1) { animation-delay: 0s; }
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes loadingPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="transition-container">
+        <div class="loading-indicator">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    </div>
+
+    <script src="scripts/util.js"></script>
+    <script src="scripts/data.rooms.js"></script>
+    <script src="scripts/transition.js"></script>
+    
+    <script>
+        // Auto-start transition when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Store that user has valid ticket
+            sessionStore.set('ticket', 'ok');
+            
+            // Start transition after brief delay
+            setTimeout(() => {
+                if (window.cinematicTransition) {
+                    window.cinematicTransition.startTransition();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

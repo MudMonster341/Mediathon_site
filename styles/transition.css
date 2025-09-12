@@ -1,0 +1,396 @@
+/**
+ * Cinematic Transition Styles
+ * Beautiful image montage animation with layered design
+ */
+
+.cinematic-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.6s ease;
+    overflow: hidden;
+}
+
+.cinematic-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cinematic-overlay.complete {
+    opacity: 0;
+    transform: scale(1.05);
+    transition: all 0.8s ease;
+}
+
+/* Background Images Layer */
+.background-images {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1.1);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* Add a subtle loading placeholder */
+    background-color: rgba(20, 20, 20, 0.9);
+}
+
+.background-image.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.background-image.fade-out {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.8s ease;
+}
+
+.background-image.portrait {
+    transform: scale(1.3);
+}
+
+.background-image.portrait.active {
+    transform: scale(1.1);
+}
+
+/* Color Overlay Layer */
+.color-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(109, 36, 33, 0.85) 0%,
+        rgba(201, 162, 39, 0.25) 30%,
+        rgba(109, 36, 33, 0.7) 70%,
+        rgba(0, 0, 0, 0.9) 100%
+    );
+    z-index: 15;
+}
+
+/* Content Layer */
+.cinematic-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+}
+
+/* Full Screen Text Overlay - Only shows on first image */
+.text-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    opacity: 1;
+    transition: all 1.2s ease;
+}
+
+.text-overlay.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.9);
+}
+
+.text-overlay.fade-out .transition-text {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+}
+
+/* Additional text background for better readability */
+.transition-text {
+    text-align: center;
+    color: #f4e4a6;
+    z-index: 10;
+    animation: textSlideUp 1s ease 0.3s both;
+    padding: 1.5rem 2rem;
+    background: rgba(109, 36, 33, 0.8);
+    border-radius: 15px;
+    backdrop-filter: blur(8px);
+    border: 2px solid #ffb323;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 179, 35, 0.3);
+    transition: all 1.2s ease;
+}
+
+.transition-text h2 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+    background: linear-gradient(135deg, #f4e4a6 0%, #ffb323 50%, #f4e4a6 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: goldShimmer 3s ease-in-out infinite, textSlideUp 1s ease 0.3s both;
+    line-height: 1.1;
+}
+
+.transition-text p {
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244, 228, 166, 0.9);
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+    margin-bottom: 2rem;
+}
+
+/* Loading Animation */
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f4e4a6, #ffb323);
+    animation: loadingPulse 1.5s ease-in-out infinite;
+    box-shadow: 0 2px 10px rgba(255, 179, 35, 0.5);
+}
+
+.loading-dots span:nth-child(1) { animation-delay: 0s; }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Animations */
+@keyframes textSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes goldShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes loadingPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .background-image.portrait {
+        transform: scale(1.4);
+    }
+    
+    .background-image.portrait.active {
+        transform: scale(1.2);
+    }
+    
+    .transition-text {
+        padding: 0 1.5rem;
+    }
+    
+    .transition-text h2 {
+        margin-bottom: 0.75rem;
+    }
+    
+    .transition-text p {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .transition-text {
+        padding: 0 1rem;
+    }
+    
+    .transition-text h2 {
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+    
+    .transition-text p {
+        margin-bottom: 1rem;
+        letter-spacing: 0.1em;
+    }
+    
+    .loading-dots {
+        gap: 0.4rem;
+    }
+    
+    .loading-dots span {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+    .transition-text h2 {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        margin-bottom: 0.5rem;
+    }
+    
+    .transition-text p {
+        font-size: clamp(0.9rem, 2vw, 1.2rem);
+        margin-bottom: 1rem;
+    }
+}
+
+/* High resolution displays */
+@media (min-width: 1200px) {
+    .background-image {
+        background-attachment: fixed;
+    }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .cinematic-overlay,
+    .background-image,
+    .transition-text h2 {
+        animation: none;
+        transition: opacity 0.3s ease;
+    }
+    
+    .loading-dots span {
+        animation: none;
+        opacity: 0.8;
+    }
+}
+
+/* =============================================================================
+   Final Cinematic Text - Styled like index.html landing title
+   ============================================================================= */
+
+.final-cinematic-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1.5s ease;
+    text-align: center;
+    padding: 0 2rem;
+}
+
+.final-cinematic-text.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cinematic-title {
+    font-family: "TAN Harmoni", "Cormorant Garamond", serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+    
+    /* Golden textured effect - same as index.html */
+    background: linear-gradient(135deg, #f4e4a6 0%, #d4af37 25%, #b8860b 50%, #d4af37 75%, #f4e4a6 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    
+    /* Enhanced shadows for depth */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+    
+    /* Subtle animation */
+    animation: goldShimmer 3s ease-in-out infinite;
+}
+
+.cinematic-subtitle {
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.6rem);
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244, 228, 166, 0.9);
+    margin: 0;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+    animation: subtitleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes goldShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes subtitleGlow {
+    0% { 
+        text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8); 
+        opacity: 0.9;
+    }
+    100% { 
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8), 0 0 30px rgba(244, 228, 166, 0.3); 
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments for cinematic text */
+@media (max-width: 768px) {
+    .final-cinematic-text {
+        padding: 0 1rem;
+    }
+    
+    .cinematic-title {
+        margin-bottom: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cinematic-subtitle {
+        letter-spacing: 0.15em;
+    }
+}

@@ -1,0 +1,337 @@
+/* =============================================================================
+   Base Styles - Modern Reset & Design System
+   ============================================================================= */
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* =============================================================================
+   Design System Variables
+   ============================================================================= */
+
+:root {
+    /* Colors - Dark Pink & Gold Theme */
+    --wall: #6d2421;              /* Dark pink wall color */
+    --floor: #4a1817;             /* Darker pink floor */
+    --charcoal: #0f1115;          /* Dark text color */
+    --gold: #ffb323;              /* Accent gold color */
+    --gold-dark: #e09d1f;         /* Darker gold */
+    --gold-light: #ffc757;        /* Lighter gold */
+    --muted: #c8a2a0;             /* Muted pink tone */
+    --white: #fff;
+    --pink-light: #8e3430;        /* Lighter pink accent */
+    --pink-dark: #3d1614;         /* Darkest pink */
+    
+    /* Neutral palette */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    
+    /* Typography */
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Montserrat', system-ui, sans-serif;
+    
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    
+    /* Border radius */
+    --radius-sm: 0.125rem;
+    --radius-md: 0.25rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    
+    /* Transitions */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Frame dimensions */
+    --frame-border: 3px;
+    --frame-mat-landscape: 2rem;
+    --frame-mat-portrait: 1.5rem;
+}
+
+/* =============================================================================
+   Typography
+   ============================================================================= */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--charcoal);
+}
+
+.museum-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.exhibit-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 400;
+}
+
+.photo-title {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-weight: 400;
+    color: var(--gold);
+}
+
+/* =============================================================================
+   Accessibility
+   ============================================================================= */
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* High contrast focus outlines */
+*:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Remove outline for mouse users */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Ensure interactive elements have proper focus states */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+/* =============================================================================
+   Form Elements
+   ============================================================================= */
+
+input,
+select,
+textarea {
+    background: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: var(--gray-400);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgb(201 162 39 / 0.1);
+}
+
+/* =============================================================================
+   Buttons
+   ============================================================================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--gold);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: #e09d1f;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--white);
+    color: var(--charcoal);
+    border: 1px solid var(--gray-300);
+}
+
+.btn-secondary:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-400);
+}
+
+/* =============================================================================
+   Utilities
+   ============================================================================= */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+
+.text-gold { color: var(--gold); }
+.text-muted { color: var(--muted); }
+.text-charcoal { color: var(--charcoal); }
+
+.bg-wall { background-color: var(--wall); }
+.bg-white { background-color: var(--white); }
+
+.hidden { display: none !important; }
+.invisible { visibility: hidden; }
+
+/* Smooth animations */
+.smooth-transition {
+    transition: all var(--transition-normal);
+}
+
+/* Text clamping utility */
+.clamp-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.clamp-1 { 
+    -webkit-line-clamp: 1; 
+    line-clamp: 1; 
+}
+.clamp-2 { 
+    -webkit-line-clamp: 2; 
+    line-clamp: 2; 
+}
+.clamp-3 { 
+    -webkit-line-clamp: 3; 
+    line-clamp: 3; 
+}
+
+/* =============================================================================
+   Museum Environment Variables & Utilities
+   ============================================================================= */
+
+:root {
+    --floor-wood-1: #2a3f2f;
+    --floor-wood-2: #1f3329;
+    --floor-wood-3: #355043;
+    --rope: #8b7355;
+    --metal: #ffb323;
+    --shadow: rgba(0,0,0,.3);
+    --shadow-2: rgba(0,0,0,.5);
+    --label: #f4f1e8;
+    --label-text: #2d4a3d;
+}
+
+.museum-skylight {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 18vh;
+    pointer-events: none;
+    background:
+        linear-gradient(to bottom, rgba(255,255,255,.55), rgba(255,255,255,0)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.35) 0 1px, rgba(255,255,255,0) 1px 12px);
+    filter: blur(1px);
+    mix-blend-mode: screen;
+}
+
+.museum-floor {
+    position: fixed;
+    inset: auto 0 0 0;
+    height: 22vh;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(-45deg, var(--floor-wood-1) 0 22px, var(--floor-wood-2) 22px 44px),
+        repeating-linear-gradient(45deg, var(--floor-wood-3) 0 22px, var(--floor-wood-1) 22px 44px);
+    box-shadow: 0 -12px 22px var(--shadow-2) inset;
+}
+
+.vis-dots {
+    background-image: radial-gradient(rgba(0,0,0,.025) 1px, transparent 1px);
+    background-size: 6px 6px;
+}

@@ -1,0 +1,247 @@
+/**
+ * Quote Page Styles - Red Damask Theme
+ * Elegant Victorian-style quote page
+ */
+
+.quote-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.8s ease;
+}
+
+.quote-page.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.quote-page.fade-out {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.quote-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%),
+        linear-gradient(135deg, #8B0000 0%, #A0522D 25%, #8B0000 50%, #654321 75%, #8B0000 100%);
+    
+    /* Damask pattern overlay */
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(160, 82, 45, 0.2) 0%, transparent 50%),
+        repeating-linear-gradient(
+            45deg,
+            rgba(139, 0, 0, 0.1) 0px,
+            rgba(139, 0, 0, 0.1) 2px,
+            transparent 2px,
+            transparent 20px
+        );
+    
+    /* Subtle texture */
+    position: relative;
+}
+
+.quote-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(218, 165, 32, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(218, 165, 32, 0.1) 0%, transparent 50%);
+    opacity: 0.6;
+}
+
+.quote-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 2rem;
+}
+
+.welcome-text-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.welcome-text {
+    font-family: "TAN Harmoni", "Cormorant Garamond", serif;
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 600;
+    color: #DAA520;
+    text-shadow: 
+        0 0 20px rgba(218, 165, 32, 0.5),
+        0 4px 8px rgba(0, 0, 0, 0.8),
+        2px 2px 4px rgba(0, 0, 0, 0.6);
+    margin: 0;
+    letter-spacing: 0.1em;
+    
+    /* Golden gradient effect */
+    background: linear-gradient(135deg, #FFD700 0%, #DAA520 25%, #B8860B 50%, #DAA520 75%, #FFD700 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: goldShimmer 4s ease-in-out infinite;
+}
+
+.welcome-text.typing::after {
+    content: '|';
+    color: #DAA520;
+    animation: blink 1s infinite;
+    -webkit-text-fill-color: #DAA520;
+}
+
+.welcome-underline {
+    width: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent 0%, #DAA520 50%, transparent 100%);
+    margin: 1rem auto;
+    transition: width 1s ease;
+    box-shadow: 0 2px 10px rgba(218, 165, 32, 0.3);
+}
+
+.welcome-underline.show {
+    width: 80%;
+}
+
+.quote-subtitle {
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(218, 165, 32, 0.9);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease;
+}
+
+.quote-subtitle.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.decorative-frames {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.frame {
+    position: absolute;
+    border: 8px solid #DAA520;
+    border-radius: 12px;
+    background: rgba(218, 165, 32, 0.1);
+    box-shadow: 
+        0 0 20px rgba(218, 165, 32, 0.3),
+        inset 0 0 20px rgba(218, 165, 32, 0.1);
+    
+    /* Ornate frame effect */
+    background-image: 
+        linear-gradient(45deg, rgba(255, 215, 0, 0.1) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255, 215, 0, 0.1) 25%, transparent 25%);
+    background-size: 20px 20px;
+}
+
+.frame-1 {
+    top: 5%;
+    left: 5%;
+    width: 150px;
+    height: 100px;
+    animation: frameFloat 6s ease-in-out infinite;
+}
+
+.frame-2 {
+    top: 15%;
+    right: 8%;
+    width: 120px;
+    height: 120px;
+    animation: frameFloat 6s ease-in-out infinite 1s;
+}
+
+.frame-3 {
+    bottom: 20%;
+    left: 8%;
+    width: 130px;
+    height: 90px;
+    animation: frameFloat 6s ease-in-out infinite 2s;
+}
+
+.frame-4 {
+    bottom: 10%;
+    right: 12%;
+    width: 100px;
+    height: 130px;
+    animation: frameFloat 6s ease-in-out infinite 3s;
+}
+
+@keyframes goldShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+@keyframes frameFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translateY(-10px) rotate(1deg);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .frame {
+        border-width: 6px;
+    }
+    
+    .frame-1, .frame-2, .frame-3, .frame-4 {
+        width: 80px;
+        height: 60px;
+    }
+    
+    .quote-content {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .frame {
+        border-width: 4px;
+    }
+    
+    .frame-1, .frame-2, .frame-3, .frame-4 {
+        width: 60px;
+        height: 45px;
+    }
+}
