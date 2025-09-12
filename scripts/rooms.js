@@ -299,7 +299,9 @@ class ArtGallery {
     updateModalContent(imageData) {
         // Create image directly without museum frame
         const img = document.createElement('img');
-        img.src = imageData.src;
+        // Use .jpg for the modal (full-size) image instead of .png
+        const modalImageSrc = imageData.src.replace('.png', '.jpg');
+        img.src = modalImageSrc;
         img.alt = imageData.alt;
         img.className = 'modal-image';
         
