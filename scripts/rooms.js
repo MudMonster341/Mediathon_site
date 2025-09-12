@@ -1,166 +1,271 @@
 /**
- * Image Grid Gallery with Modal Display
- * Click-based image selection with sophisticated modal
+ * Art Gallery with CSV-Based Quotes and Masonry Layout
+ * Pure vanilla JavaScript implementation
  */
 
-class GridGallery {
+class ArtGallery {
     constructor() {
-        this.photos = [];
+        this.quotes = new Map();
+        this.images = [];
         this.modal = null;
-        this.modalImage = null;
-        this.modalQuote = null;
         this.isModalOpen = false;
+        this.lastFocusedElement = null;
         
         this.init();
     }
     
-    init() {
-        // Check authentication first
-        if (!this.checkAuth()) return;
+    async init() {
+        console.log('🎨 Initializing Art Gallery...');
         
-        // Wait for DOM to be ready
+        // Wait for DOM
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.setup());
         } else {
-            this.setup();
+            await this.setup();
         }
     }
     
-    checkAuth() {
-        // Verify user has valid ticket from entry hall
-        const hasTicket = sessionStore.get('ticket') === 'ok';
-        if (!hasTicket) {
-            console.log('No valid ticket found, redirecting to entry');
-            window.location.href = 'index.html';
-            return false;
+    async setup() {
+        try {
+            // Step 1: Load quotes from CSV
+            await this.loadQuotes();
+            
+            // Step 2: Generate image list from available PNG files
+            this.generateImageList();
+            
+            // Step 3: Setup DOM elements
+            this.setupModal();
+            
+            // Step 4: Create masonry gallery
+            await this.createMasonryGallery();
+            
+            // Step 5: Setup event listeners
+            this.setupEventListeners();
+            
+            console.log(`✅ Gallery initialized with ${this.images.length} images`);
+        } catch (error) {
+            console.error('❌ Failed to initialize gallery:', error);
         }
-        return true;
     }
     
-    setup() {
-        // Verify museum data is loaded
-        if (!window.MUSEUM || !window.MUSEUM.rooms) {
-            console.error('Museum data not loaded');
-            return;
+    async loadQuotes() {
+        try {
+            const response = await fetch('assets/Carousel_images/MEDIATHON_QUOTES.csv');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            const csvText = await response.text();
+            const lines = csvText.split('\n').filter(line => line.trim());
+            
+            // Skip header line, parse data
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                // Parse CSV (handle quoted values)
+                const [filename, quote] = this.parseCSVLine(line);
+                if (filename && quote) {
+                    // Map both .jpg and .png versions to same quote
+                    const baseName = filename.replace('.jpg', '');
+                    this.quotes.set(`${baseName}.jpg`, quote);
+                    this.quotes.set(`${baseName}.png`, quote);
+                }
+            }
+            
+            console.log(`📝 Loaded ${this.quotes.size} quotes`);
+        } catch (error) {
+            console.error('Failed to load quotes:', error);
+            // Continue with empty quotes map
         }
-        
-        // Load only campus photos for gallery
-        this.loadCampusPhotos();
-        
-        // Setup DOM elements
-        this.setupModal();
-        
-        // Generate image grid
-        this.generateImageGrid();
-        
-        // Setup event listeners
-        this.setupEventListeners();
-        
-        console.log(`Grid gallery initialized with ${this.photos.length} images`);
     }
     
-    loadCampusPhotos() {
-        const campusRoom = window.MUSEUM.getRoomById('campus');
-        if (campusRoom && campusRoom.photos) {
-            this.photos = campusRoom.photos;
-        } else {
-            console.error('Campus photos not found');
-        }
+    parseCSVLine(line) {
+        // Handle CSV with potential formatting issues
+        const commaIndex = line.indexOf(',');
+        if (commaIndex === -1) return [null, null];
+        
+        const filename = line.substring(0, commaIndex).trim();
+        let quote = line.substring(commaIndex + 1).trim();
+        
+        // Clean up quote formatting
+        quote = quote.replace(/^"*|"*$/g, ''); // Remove leading/trailing quotes
+        quote = quote.replace(/""/g, '"'); // Replace double quotes with single
+        quote = quote.trim();
+        
+        return [filename, quote];
+    }
+    
+    generateImageList() {
+        // Generate list of PNG images based on known pattern
+        const imageNumbers = Array.from({length: 15}, (_, i) => i + 1);
+        
+        this.images = imageNumbers.map(num => {
+            const filename = `IMG_${num}.png`;
+            const baseName = `IMG_${num}`;
+            const imagePath = `assets/Carousel_images/${filename}`;
+            
+            console.log(`🖼️ Generating image entry: ${imagePath}`);
+            
+            return {
+                src: imagePath,
+                filename: filename,
+                alt: `Student life image ${num}`,
+                quote: this.quotes.get(`${baseName}.jpg`) || this.quotes.get(`${baseName}.png`) || 'A moment captured in time.',
+                id: `img-${num}`
+            };
+        });
+        
+        console.log(`🖼️ Generated ${this.images.length} image entries`);
     }
     
     setupModal() {
-        this.modal = qs('#imageModal');
-        this.modalImage = qs('#modalImage');
-        this.modalQuote = qs('#modalQuote');
-        this.museumFrame = qs('#museumFrame');
-        
-        if (!this.modal || !this.modalImage || !this.modalQuote) {
-            console.error('Modal elements not found');
+        this.modal = document.getElementById('imageModal');
+        if (!this.modal) {
+            console.error('Modal element not found');
+            return;
         }
+        
+        this.modalImageContainer = this.modal.querySelector('.modal-image-container');
+        this.modalQuote = this.modal.querySelector('.modal-quote');
+        this.modalClose = this.modal.querySelector('.modal-close');
+        this.modalOverlay = this.modal.querySelector('.modal-overlay');
     }
     
-    generateImageGrid() {
-        const grid = qs('#imageGrid');
+    async createMasonryGallery() {
+        const grid = document.getElementById('masonryGrid');
         if (!grid) {
-            console.error('Image grid container not found');
+            console.error('Gallery grid not found');
             return;
         }
         
         // Clear existing content
         grid.innerHTML = '';
         
-        // Generate grid items
-        this.photos.forEach((photo, index) => {
-            const card = document.createElement('div');
-            card.className = 'image-card';
-            card.dataset.index = index;
-            
-            // Create preview text (first 80 characters of quote)
-            const previewText = photo.quote ? 
-                (photo.quote.length > 80 ? photo.quote.substring(0, 80) + '...' : photo.quote) :
-                'Click to view this image';
-            
-            card.innerHTML = `
-                <img src="${photo.src}" alt="${photo.alt || photo.title}" loading="lazy">
-                <div class="image-card-overlay">
-                    <h3 class="image-card-title">${photo.title}</h3>
-                    <p class="image-card-preview">${previewText}</p>
-                </div>
-            `;
-            
-            grid.appendChild(card);
-        });
+        // Create gallery items
+        for (const [index, imageData] of this.images.entries()) {
+            const item = await this.createGalleryItem(imageData, index);
+            grid.appendChild(item);
+        }
         
-        console.log(`Generated ${this.photos.length} image cards`);
+        // Apply masonry layout after all images load
+        setTimeout(() => this.applyMasonryLayout(), 100);
+    }
+    
+    async createGalleryItem(imageData, index) {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.dataset.index = index;
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('role', 'button');
+        item.setAttribute('aria-label', `View image: ${imageData.alt}`);
+        
+        // Create image directly without museum frame
+        const img = document.createElement('img');
+        img.src = imageData.src;
+        img.alt = imageData.alt;
+        img.loading = 'lazy';
+        img.className = 'gallery-image';
+        
+        item.appendChild(img);
+        
+        // Wait for image to load and calculate grid spans
+        return new Promise((resolve) => {
+            img.onload = () => {
+                this.calculateGridSpans(item, img);
+                resolve(item);
+            };
+            
+            img.onerror = () => {
+                console.warn(`Failed to load image: ${imageData.src}`);
+                item.style.display = 'none';
+                resolve(item);
+            };
+            
+            // Fallback timeout
+            setTimeout(() => resolve(item), 5000);
+        });
+    }
+    
+    calculateGridSpans(item, img) {
+        const aspectRatio = img.naturalHeight / img.naturalWidth;
+        
+        // Calculate row span based on aspect ratio
+        // Base row height is 10px, typical image height ~200-400px
+        const baseSpan = 20; // Minimum rows
+        const rowSpan = Math.ceil(baseSpan * aspectRatio);
+        
+        // Apply grid positioning
+        item.style.gridRowEnd = `span ${Math.max(rowSpan, baseSpan)}`;
+        
+        // Add orientation class for additional styling
+        if (aspectRatio > 1.2) {
+            item.classList.add('portrait');
+        } else if (aspectRatio < 0.8) {
+            item.classList.add('landscape');
+        }
+    }
+    
+    applyMasonryLayout() {
+        const grid = document.getElementById('masonryGrid');
+        if (!grid) return;
+        
+        // Force browser to recalculate grid layout
+        grid.style.display = 'none';
+        grid.offsetHeight; // Trigger reflow
+        grid.style.display = 'grid';
+        
+        console.log('🧱 Applied masonry layout');
     }
     
     setupEventListeners() {
-        // Image card click events
-        on(document, 'click', (e) => {
-            const card = e.target.closest('.image-card');
-            if (card) {
-                const index = parseInt(card.dataset.index);
-                this.openModal(index);
-            }
-        });
+        // Gallery item click/keyboard events
+        document.addEventListener('click', this.handleGalleryClick.bind(this));
+        document.addEventListener('keydown', this.handleKeyDown.bind(this));
         
         // Modal close events
-        const closeBtn = qs('.modal-close');
-        const overlay = qs('.modal-overlay');
-        
-        if (closeBtn) {
-            on(closeBtn, 'click', () => this.closeModal());
+        if (this.modalClose) {
+            this.modalClose.addEventListener('click', this.closeModal.bind(this));
         }
         
-        if (overlay) {
-            on(overlay, 'click', () => this.closeModal());
+        if (this.modalOverlay) {
+            this.modalOverlay.addEventListener('click', this.closeModal.bind(this));
         }
         
-        // Keyboard events
-        on(document, 'keydown', (e) => this.handleKeyDown(e));
+        // Window resize
+        window.addEventListener('resize', this.debounce(this.applyMasonryLayout.bind(this), 300));
     }
     
-    openModal(index) {
-        const photo = this.photos[index];
-        if (!photo || !this.modal || !this.modalImage || !this.modalQuote) return;
+    handleGalleryClick(event) {
+        const item = event.target.closest('.gallery-item');
+        if (!item) return;
+        
+        const index = parseInt(item.dataset.index);
+        this.openModal(index);
+    }
+    
+    handleKeyDown(event) {
+        if (this.isModalOpen && event.key === 'Escape') {
+            event.preventDefault();
+            this.closeModal();
+            return;
+        }
+        
+        // Gallery navigation
+        const item = event.target.closest('.gallery-item');
+        if (item && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            const index = parseInt(item.dataset.index);
+            this.openModal(index);
+        }
+    }
+    
+    async openModal(index) {
+        const imageData = this.images[index];
+        if (!imageData || !this.modal) return;
+        
+        this.lastFocusedElement = document.activeElement;
         
         // Update modal content
-        this.modalImage.src = photo.src;
-        this.modalImage.alt = photo.alt || photo.title;
-        this.modalQuote.textContent = photo.quote || '';
-        
-        // Handle museum frame orientation
-        const frame = qs('#museumFrame');
-        if (frame) {
-            // Create a temporary image to check dimensions
-            const tempImg = new Image();
-            tempImg.onload = () => {
-                const isPortrait = tempImg.naturalWidth < tempImg.naturalHeight;
-                frame.classList.toggle('is-portrait', isPortrait);
-                frame.classList.toggle('is-landscape', !isPortrait);
-            };
-            tempImg.src = photo.src;
-        }
+        this.updateModalContent(imageData);
         
         // Show modal
         this.modal.removeAttribute('hidden');
@@ -171,11 +276,30 @@ class GridGallery {
         
         // Focus management
         setTimeout(() => {
-            const closeBtn = qs('.modal-close');
-            if (closeBtn) closeBtn.focus();
+            if (this.modalClose) {
+                this.modalClose.focus();
+            }
         }, 100);
         
-        console.log(`Opened modal for image: ${photo.title}`);
+        console.log(`🖼️ Opened modal for: ${imageData.filename}`);
+    }
+    
+    updateModalContent(imageData) {
+        // Create image directly without museum frame
+        const img = document.createElement('img');
+        img.src = imageData.src;
+        img.alt = imageData.alt;
+        img.className = 'modal-image';
+        
+        // Update modal content
+        if (this.modalImageContainer) {
+            this.modalImageContainer.innerHTML = '';
+            this.modalImageContainer.appendChild(img);
+        }
+        
+        if (this.modalQuote) {
+            this.modalQuote.textContent = imageData.quote;
+        }
     }
     
     closeModal() {
@@ -187,20 +311,33 @@ class GridGallery {
         // Restore body scroll
         document.body.style.overflow = '';
         
-        console.log('Modal closed');
+        // Return focus
+        if (this.lastFocusedElement) {
+            this.lastFocusedElement.focus();
+            this.lastFocusedElement = null;
+        }
+        
+        console.log('❌ Modal closed');
     }
     
-    handleKeyDown(e) {
-        if (!this.isModalOpen) return;
-        
-        switch(e.key) {
-            case 'Escape':
-                e.preventDefault();
-                this.closeModal();
-                break;
-        }
+    // Utility function for debouncing
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
     }
 }
 
-// Create global instance
-window.gridGallery = new GridGallery();
+// Initialize the gallery when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    window.artGallery = new ArtGallery();
+});
+
+// Global reference for debugging
+window.ArtGallery = ArtGallery;

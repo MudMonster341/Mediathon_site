@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-image { margin: 10px; max-width: 200px; border: 1px solid #ccc; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Gallery Images Test</h1>
+    <div id="test-results"></div>
+    
+    <script>
+        const images = [
+            'assets/images/campus-001.jpg',
+            'assets/images/campus-002.jpg',
+            'assets/images/campus-003.jpg',
+            'assets/images/class-001.jpg',
+            'assets/images/labs-001.jpg',
+            'assets/images/sports-001.jpg'
+        ];
+        
+        const container = document.getElementById('test-results');
+        
+        images.forEach((src, index) => {
+            const div = document.createElement('div');
+            div.innerHTML = `<p>Testing: ${src}</p>`;
+            
+            const img = document.createElement('img');
+            img.className = 'test-image';
+            img.src = src;
+            
+            img.onload = () => {
+                div.innerHTML += `<p class="success">✓ Loaded: ${img.naturalWidth}x${img.naturalHeight}px</p>`;
+            };
+            
+            img.onerror = () => {
+                div.innerHTML += `<p class="error">✗ Failed to load</p>`;
+            };
+            
+            div.appendChild(img);
+            container.appendChild(div);
+        });
+    </script>
+</body>
+</html>

@@ -6,7 +6,7 @@
 window.CAROUSEL_DATA = {
     images: [
         {
-            src: 'assets/Carousel_images/IMG_1.png',
+            src: 'assets/Carousel_images/IMG_1.jpg',
             alt: 'Student in quiet study',
             quote: 'In the stillness of solitude, knowledge blooms louder than the world outside'
         },

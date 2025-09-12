@@ -26,43 +26,29 @@
             </div>
         </header>
 
-        <!-- Carousel Section -->
-        <main class="image-gallery-section">
-            <!-- Minimal Hero Carousel Section -->
-            <section class="hero-carousel" id="heroCarousel" aria-roledescription="carousel" aria-label="Featured gallery">
-                <div class="hero-carousel__viewport" tabindex="0">
-                    <ul class="hero-carousel__track" id="heroTrack">
-                        <!-- Slides will be populated by JavaScript from data.carousel.js -->
-                    </ul>
-                    
-                    <!-- Centered Navigation Controls -->
-                    <div class="hero-carousel__controls">
-                        <button class="hero-carousel__arrow prev" id="heroPrev" aria-label="Previous">‹</button>
-                        <button class="hero-carousel__arrow next" id="heroNext" aria-label="Next">›</button>
-                    </div>
-                </div>
-            </section>
+        <!-- Art Gallery Section -->
+        <main class="gallery" id="artGallery">
+            <!-- Masonry Gallery Grid -->
+            <div class="masonry-grid" id="masonryGrid">
+                <!-- Images will be populated by JavaScript -->
+            </div>
         </main>
 
-        <!-- Modal for Full Image Display -->
+        <!-- Full-Screen Modal -->
         <div id="imageModal" class="image-modal" hidden>
             <div class="modal-overlay"></div>
             <div class="modal-content">
-                <button class="modal-close" aria-label="Close">&times;</button>
+                <button class="modal-close" aria-label="Close modal">&times;</button>
                 <div class="modal-image-container">
-                    <figure class="museum-frame" id="museumFrame">
-                        <img id="modalImage" class="modal-image" src="" alt="">
-                    </figure>
+                    <!-- Image will be wrapped in museum-frame by JavaScript -->
                 </div>
                 <div class="modal-quote-section">
-                    <blockquote id="modalQuote" class="modal-quote"></blockquote>
+                    <blockquote class="modal-quote"></blockquote>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="scripts/data.carousel.js"></script>
-    <script src="scripts/util.js"></script>
-    <script src="scripts/hero-carousel.js"></script>
+    <script src="scripts/rooms.js"></script>
 </body>
 </html>
