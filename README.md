@@ -1,4 +1,4 @@
-# 🎨 The 4 Year Canvas - Student Life Museum
+# 🎨 The 4 Year Canvas - Student Life Art Museum
 
 **Live Site:** https://mudmonster341.github.io/Mediathon_site/
 
@@ -12,4 +12,4 @@
 
 ---
 
-*A beautiful digital museum showcasing student life moments with elegant frames and quotes.*
+*A beautiful digital art  museum showcasing student life moments with elegant frames and quotes.*
