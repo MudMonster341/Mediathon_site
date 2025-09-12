@@ -62,89 +62,19 @@
             letter-spacing: 0.1em;
         }
         
-        /* Museum Frame Integration */
-        .museum-frame{
-            /* ---- Theme knobs ---- */
-            --frame: 26px;
-            --mat: 18px;
-            --radius: 10px;
-            --gold1: #b68c2a;
-            --gold2: #e5c15a;
-            --gold3: #f5e2a6;
-            --gold4: #8a6a1d;
-
-            position: relative;
-            display: inline-grid;
-            grid-template-rows: auto auto;
-            gap: 10px;
-            padding: var(--mat);
-            background: #f7f4ec;
-            border-radius: calc(var(--radius) * .6);
-            box-shadow:
-                0 1px 0 rgba(255,255,255,0.6) inset,
-                0 12px 22px rgba(0,0,0,0.12);
-
-            border: var(--frame) solid transparent;
-            border-image: conic-gradient(
-                from 45deg,
-                var(--gold2) 0%,
-                var(--gold3) 12%,
-                var(--gold1) 28%,
-                var(--gold4) 45%,
-                var(--gold2) 60%,
-                var(--gold3) 76%,
-                var(--gold1) 88%,
-                var(--gold2) 100%
-            ) 1;
-
-            outline: 1px solid rgba(0,0,0,.08);
-            outline-offset: -1px;
-        }
-
-        .museum-frame::before{
-            content:"";
-            position:absolute;
-            inset: calc(var(--frame) - 6px);
-            border-radius: calc(var(--radius) * .45);
-            background:
-                linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,0) 40%) padding-box,
-                linear-gradient(315deg, rgba(0,0,0,.18), rgba(0,0,0,0) 60%) padding-box,
-                conic-gradient(from 90deg,
-                var(--gold3), var(--gold2), var(--gold1), var(--gold4), var(--gold3)
-                ) border-box;
-            border: 6px solid transparent;
-            pointer-events:none;
-            box-shadow:
-                0 0 0 1px rgba(0,0,0,.06) inset,
-                0 2px 6px rgba(0,0,0,.12) inset;
-        }
-
-        .museum-frame::after{
-            content:"";
-            position:absolute;
-            inset: calc(var(--frame) + 2px);
-            border-radius: calc(var(--radius) * .35);
-            background:
-                radial-gradient(circle at 50% 50%, rgba(255,255,255,.9) 18%, rgba(0,0,0,.15) 19% 22%, transparent 23%) 0 0/14px 14px,
-                radial-gradient(circle at 50% 50%, rgba(0,0,0,.12) 18%, transparent 19%) 7px 7px/14px 14px;
-            -webkit-mask:
-                linear-gradient(#000 0 0) padding-box,
-                linear-gradient(#000 0 0) content-box;
-            mask:
-                linear-gradient(#000 0 0) padding-box,
-                linear-gradient(#000 0 0) content-box;
-            border: 10px solid transparent;
-            pointer-events:none;
-            opacity:.35;
-        }
-
-        .museum-frame > img{
-            display:block;
+        .team-member img {
             width: 300px;
             height: 300px;
             object-fit: cover;
-            border-radius: calc(var(--radius) * .25);
-            box-shadow: 0 1px 0 rgba(255,255,255,.6) inset;
+            border-radius: 50%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 4px solid #ffb323;
+        }
+        
+        .team-member:hover img {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(255, 179, 35, 0.4);
         }
         
         .team-members {
@@ -219,14 +149,14 @@
                 padding: 1rem;
             }
             
-            .museum-frame > img {
+            .team-member img {
                 width: 250px;
                 height: 250px;
             }
         }
         
         @media (max-width: 480px) {
-            .museum-frame > img {
+            .team-member img {
                 width: 200px;
                 height: 200px;
             }
@@ -246,16 +176,12 @@
         
         <div class="team-members">
             <div class="team-member">
-                <figure class="museum-frame">
-                    <img src="assets/images/team/mustafa.jpg" alt="Mustafa" loading="lazy">
-                </figure>
+                <img src="assets/images/mustafa.jpg" alt="Mustafa" loading="eager">
                 <h2 class="member-name">Mustafa</h2>
             </div>
             
             <div class="team-member">
-                <figure class="museum-frame">
-                    <img src="assets/images/team/tarunikka.jpg" alt="Tarunikka" loading="lazy">
-                </figure>
+                <img src="assets/images/tarunikka.jpg" alt="Tarunikka" loading="eager">
                 <h2 class="member-name">Tarunikka</h2>
             </div>
         </div>

@@ -10,6 +10,8 @@ class ArtGallery {
         this.modal = null;
         this.isModalOpen = false;
         this.lastFocusedElement = null;
+        this.preloadedImages = new Map(); // Cache for preloaded images
+        this.imageLoadPromises = new Map(); // Track loading promises
         
         this.init();
     }
@@ -33,13 +35,16 @@ class ArtGallery {
             // Step 2: Generate image list from available PNG files
             this.generateImageList();
             
-            // Step 3: Setup DOM elements
+            // Step 3: Start preloading images immediately
+            this.startImagePreloading();
+            
+            // Step 4: Setup DOM elements
             this.setupModal();
             
-            // Step 4: Create masonry gallery
+            // Step 5: Create masonry gallery
             await this.createMasonryGallery();
             
-            // Step 5: Setup event listeners
+            // Step 6: Setup event listeners
             this.setupEventListeners();
             
             console.log(`✅ Gallery initialized with ${this.images.length} images`);
@@ -96,7 +101,7 @@ class ArtGallery {
     
     generateImageList() {
         // Generate list of PNG images based on known pattern
-        const imageNumbers = Array.from({length: 15}, (_, i) => i + 1);
+        const imageNumbers = Array.from({length: 16}, (_, i) => i + 1);
         
         this.images = imageNumbers.map(num => {
             const filename = `IMG_${num}.png`;
@@ -115,6 +120,42 @@ class ArtGallery {
         });
         
         console.log(`🖼️ Generated ${this.images.length} image entries`);
+    }
+    
+    startImagePreloading() {
+        console.log('🚀 Starting image preloading...');
+        
+        // Preload both PNG (thumbnails) and JPG (modal) versions
+        this.images.forEach((imageData, index) => {
+            // Preload PNG thumbnail
+            this.preloadImage(imageData.src, `thumb-${index}`);
+            
+            // Preload JPG modal version
+            const modalSrc = imageData.src.replace('.png', '.jpg');
+            this.preloadImage(modalSrc, `modal-${index}`);
+        });
+    }
+    
+    preloadImage(src, key) {
+        if (this.preloadedImages.has(key)) {
+            return this.preloadedImages.get(key);
+        }
+        
+        const promise = new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                console.log(`✅ Preloaded: ${src}`);
+                resolve(img);
+            };
+            img.onerror = () => {
+                console.warn(`❌ Failed to preload: ${src}`);
+                reject(new Error(`Failed to load ${src}`));
+            };
+            img.src = src;
+        });
+        
+        this.preloadedImages.set(key, promise);
+        return promise;
     }
     
     setupModal() {
@@ -137,17 +178,37 @@ class ArtGallery {
             return;
         }
         
-        // Clear existing content
+        // Clear existing content and show loading state
+        grid.innerHTML = '<div class="loading-state">Loading gallery...</div>';
+        
+        // Create all gallery items in parallel for faster rendering
+        const itemPromises = this.images.map((imageData, index) => 
+            this.createGalleryItem(imageData, index)
+        );
+        
+        // Wait for first few items to load before showing them
+        const batchSize = 6; // Show first 6 items immediately
+        const firstBatch = await Promise.all(itemPromises.slice(0, batchSize));
+        
+        // Clear loading state and add first batch
         grid.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+        firstBatch.forEach(item => fragment.appendChild(item));
+        grid.appendChild(fragment);
         
-        // Create gallery items
-        for (const [index, imageData] of this.images.entries()) {
-            const item = await this.createGalleryItem(imageData, index);
-            grid.appendChild(item);
+        // Apply layout for first batch
+        this.applyMasonryLayout();
+        
+        // Load remaining items in background
+        if (itemPromises.length > batchSize) {
+            const remainingItems = await Promise.all(itemPromises.slice(batchSize));
+            const remainingFragment = document.createDocumentFragment();
+            remainingItems.forEach(item => remainingFragment.appendChild(item));
+            grid.appendChild(remainingFragment);
+            
+            // Re-apply layout after all items are loaded
+            setTimeout(() => this.applyMasonryLayout(), 50);
         }
-        
-        // Apply masonry layout after all images load
-        setTimeout(() => this.applyMasonryLayout(), 100);
     }
     
     async createGalleryItem(imageData, index) {
@@ -160,10 +221,24 @@ class ArtGallery {
         
         // Create image directly without museum frame
         const img = document.createElement('img');
-        img.src = imageData.src;
         img.alt = imageData.alt;
-        img.loading = 'lazy';
+        img.loading = 'eager'; // Prioritize loading for above-the-fold images
         img.className = 'gallery-image';
+        
+        // Use preloaded image if available
+        try {
+            const preloadedImg = await this.preloadedImages.get(`thumb-${index}`);
+            if (preloadedImg) {
+                img.src = preloadedImg.src;
+                // Image is already loaded, calculate spans immediately
+                this.calculateGridSpans(item, preloadedImg);
+            } else {
+                img.src = imageData.src;
+            }
+        } catch (error) {
+            console.warn(`Using fallback loading for image ${index}`);
+            img.src = imageData.src;
+        }
         
         // Create quote section below image
         const quoteSection = document.createElement('div');
@@ -178,22 +253,26 @@ class ArtGallery {
         item.appendChild(img);
         item.appendChild(quoteSection);
         
-        // Wait for image to load and calculate grid spans
-        return new Promise((resolve) => {
-            img.onload = () => {
-                this.calculateGridSpans(item, img);
-                resolve(item);
-            };
-            
-            img.onerror = () => {
-                console.warn(`Failed to load image: ${imageData.src}`);
-                item.style.display = 'none';
-                resolve(item);
-            };
-            
-            // Fallback timeout
-            setTimeout(() => resolve(item), 5000);
-        });
+        // If image wasn't preloaded, wait for it to load
+        if (!this.preloadedImages.has(`thumb-${index}`)) {
+            return new Promise((resolve) => {
+                img.onload = () => {
+                    this.calculateGridSpans(item, img);
+                    resolve(item);
+                };
+                
+                img.onerror = () => {
+                    console.warn(`Failed to load image: ${imageData.src}`);
+                    item.style.display = 'none';
+                    resolve(item);
+                };
+                
+                // Fallback timeout
+                setTimeout(() => resolve(item), 3000); // Reduced timeout
+            });
+        }
+        
+        return item;
     }
     
     calculateGridSpans(item, img) {
@@ -220,12 +299,15 @@ class ArtGallery {
         const grid = document.getElementById('masonryGrid');
         if (!grid) return;
         
-        // Force browser to recalculate grid layout
-        grid.style.display = 'none';
-        grid.offsetHeight; // Trigger reflow
-        grid.style.display = 'grid';
-        
-        console.log('🧱 Applied masonry layout');
+        // Use requestAnimationFrame for smoother rendering
+        requestAnimationFrame(() => {
+            // Force browser to recalculate grid layout
+            grid.style.display = 'none';
+            grid.offsetHeight; // Trigger reflow
+            grid.style.display = 'grid';
+            
+            console.log('🧱 Applied masonry layout');
+        });
     }
     
     setupEventListeners() {
@@ -277,7 +359,7 @@ class ArtGallery {
         this.lastFocusedElement = document.activeElement;
         
         // Update modal content
-        this.updateModalContent(imageData);
+        this.updateModalContent(imageData, index);
         
         // Show modal
         this.modal.removeAttribute('hidden');
@@ -296,14 +378,29 @@ class ArtGallery {
         console.log(`🖼️ Opened modal for: ${imageData.filename}`);
     }
     
-    updateModalContent(imageData) {
+    async updateModalContent(imageData, index) {
         // Create image directly without museum frame
         const img = document.createElement('img');
-        // Use .jpg for the modal (full-size) image instead of .png
-        const modalImageSrc = imageData.src.replace('.png', '.jpg');
-        img.src = modalImageSrc;
         img.alt = imageData.alt;
         img.className = 'modal-image';
+        
+        // Use preloaded JPG image for instant display
+        try {
+            const preloadedImg = await this.preloadedImages.get(`modal-${index}`);
+            if (preloadedImg) {
+                img.src = preloadedImg.src;
+                console.log(`🚀 Using preloaded modal image for ${index}`);
+            } else {
+                // Fallback to loading the JPG version
+                const modalImageSrc = imageData.src.replace('.png', '.jpg');
+                img.src = modalImageSrc;
+            }
+        } catch (error) {
+            // Fallback to loading the JPG version
+            const modalImageSrc = imageData.src.replace('.png', '.jpg');
+            img.src = modalImageSrc;
+            console.warn(`Using fallback loading for modal image ${index}`);
+        }
         
         // Update modal content
         if (this.modalImageContainer) {
