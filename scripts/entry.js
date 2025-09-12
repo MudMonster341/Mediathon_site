@@ -82,6 +82,19 @@ class EntryHall {
         }
     }
     
+    // Method to reset authentication (clears the ticket)
+    resetAuthentication() {
+        sessionStore.remove('ticket');
+        console.log('Authentication reset - users will need to enter password again');
+        
+        // If currently on a protected page, redirect to index
+        if (window.location.pathname !== '/index.html' && 
+            window.location.pathname !== '/' && 
+            !window.location.pathname.endsWith('index.html')) {
+            window.location.href = 'index.html';
+        }
+    }
+    
     openModal() {
         if (!this.modal) return;
         
@@ -284,3 +297,19 @@ const entryHall = new EntryHall();
 
 // Export for potential testing/debugging
 window.entryHall = entryHall;
+
+// Global function to reset authentication
+window.resetAuth = function() {
+    sessionStore.remove('ticket');
+    console.log('🔒 Authentication reset! Users will need to enter password again.');
+    
+    // If currently on a protected page, redirect to index
+    if (window.location.pathname !== '/index.html' && 
+        window.location.pathname !== '/' && 
+        !window.location.pathname.endsWith('index.html')) {
+        console.log('🔄 Redirecting to login page...');
+        window.location.href = 'index.html';
+    }
+    
+    return 'Authentication successfully reset!';
+};
