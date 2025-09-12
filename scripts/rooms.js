@@ -181,34 +181,23 @@ class ArtGallery {
         // Clear existing content and show loading state
         grid.innerHTML = '<div class="loading-state">Loading gallery...</div>';
         
-        // Create all gallery items in parallel for faster rendering
-        const itemPromises = this.images.map((imageData, index) => 
-            this.createGalleryItem(imageData, index)
-        );
+        // Create all gallery items
+        const items = [];
+        for (let i = 0; i < this.images.length; i++) {
+            const item = await this.createGalleryItem(this.images[i], i);
+            items.push(item);
+        }
         
-        // Wait for first few items to load before showing them
-        const batchSize = 6; // Show first 6 items immediately
-        const firstBatch = await Promise.all(itemPromises.slice(0, batchSize));
-        
-        // Clear loading state and add first batch
+        // Clear loading state and add all items at once
         grid.innerHTML = '';
         const fragment = document.createDocumentFragment();
-        firstBatch.forEach(item => fragment.appendChild(item));
+        items.forEach(item => fragment.appendChild(item));
         grid.appendChild(fragment);
         
-        // Apply layout for first batch
+        // Apply initial layout
         this.applyMasonryLayout();
         
-        // Load remaining items in background
-        if (itemPromises.length > batchSize) {
-            const remainingItems = await Promise.all(itemPromises.slice(batchSize));
-            const remainingFragment = document.createDocumentFragment();
-            remainingItems.forEach(item => remainingFragment.appendChild(item));
-            grid.appendChild(remainingFragment);
-            
-            // Re-apply layout after all items are loaded
-            setTimeout(() => this.applyMasonryLayout(), 50);
-        }
+        console.log(`🎨 Gallery created with ${items.length} items and staggered animations`);
     }
     
     async createGalleryItem(imageData, index) {
@@ -225,21 +214,6 @@ class ArtGallery {
         img.loading = 'eager'; // Prioritize loading for above-the-fold images
         img.className = 'gallery-image';
         
-        // Use preloaded image if available
-        try {
-            const preloadedImg = await this.preloadedImages.get(`thumb-${index}`);
-            if (preloadedImg) {
-                img.src = preloadedImg.src;
-                // Image is already loaded, calculate spans immediately
-                this.calculateGridSpans(item, preloadedImg);
-            } else {
-                img.src = imageData.src;
-            }
-        } catch (error) {
-            console.warn(`Using fallback loading for image ${index}`);
-            img.src = imageData.src;
-        }
-        
         // Create quote section below image
         const quoteSection = document.createElement('div');
         quoteSection.className = 'quote-section';
@@ -253,24 +227,38 @@ class ArtGallery {
         item.appendChild(img);
         item.appendChild(quoteSection);
         
-        // If image wasn't preloaded, wait for it to load
-        if (!this.preloadedImages.has(`thumb-${index}`)) {
-            return new Promise((resolve) => {
-                img.onload = () => {
-                    this.calculateGridSpans(item, img);
-                    resolve(item);
-                };
-                
-                img.onerror = () => {
-                    console.warn(`Failed to load image: ${imageData.src}`);
-                    item.style.display = 'none';
-                    resolve(item);
-                };
-                
-                // Fallback timeout
-                setTimeout(() => resolve(item), 3000); // Reduced timeout
-            });
+        // Handle image loading with animation
+        const handleImageLoad = () => {
+            img.classList.add('loaded');
+            item.classList.add('image-loaded');
+            this.calculateGridSpans(item, img);
+            
+            // Trigger layout recalculation after a short delay
+            setTimeout(() => this.applyMasonryLayout(), 100);
+        };
+        
+        // Use preloaded image if available
+        try {
+            const preloadedImg = await this.preloadedImages.get(`thumb-${index}`);
+            if (preloadedImg) {
+                img.src = preloadedImg.src;
+                // Image is already loaded, show it immediately
+                handleImageLoad();
+            } else {
+                img.src = imageData.src;
+                img.onload = handleImageLoad;
+            }
+        } catch (error) {
+            console.warn(`Using fallback loading for image ${index}`);
+            img.src = imageData.src;
+            img.onload = handleImageLoad;
         }
+        
+        // Error handling
+        img.onerror = () => {
+            console.warn(`Failed to load image: ${imageData.src}`);
+            item.style.display = 'none';
+        };
         
         return item;
     }
