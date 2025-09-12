@@ -165,7 +165,18 @@ class ArtGallery {
         img.loading = 'lazy';
         img.className = 'gallery-image';
         
+        // Create quote section below image
+        const quoteSection = document.createElement('div');
+        quoteSection.className = 'quote-section';
+        
+        const quoteText = document.createElement('p');
+        quoteText.className = 'quote-text';
+        quoteText.textContent = imageData.quote;
+        
+        quoteSection.appendChild(quoteText);
+        
         item.appendChild(img);
+        item.appendChild(quoteSection);
         
         // Wait for image to load and calculate grid spans
         return new Promise((resolve) => {
@@ -190,11 +201,12 @@ class ArtGallery {
         
         // Calculate row span based on aspect ratio
         // Base row height is 10px, typical image height ~200-400px
-        const baseSpan = 20; // Minimum rows
-        const rowSpan = Math.ceil(baseSpan * aspectRatio);
+        const baseSpan = 20; // Minimum rows for image
+        const quoteSpan = 8; // Additional rows for quote section
+        const rowSpan = Math.ceil(baseSpan * aspectRatio) + quoteSpan;
         
         // Apply grid positioning
-        item.style.gridRowEnd = `span ${Math.max(rowSpan, baseSpan)}`;
+        item.style.gridRowEnd = `span ${Math.max(rowSpan, baseSpan + quoteSpan)}`;
         
         // Add orientation class for additional styling
         if (aspectRatio > 1.2) {
